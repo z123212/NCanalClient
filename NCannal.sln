@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCanalClient", "NCanalClient\NCanalClient.csproj", "{426F64A9-BF97-4CCD-9973-2728906D8DDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{93EC05DC-F20B-4873-8938-63D3B316F27D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCannal.Test", "Tests\NCannal.Test\NCannal.Test.csproj", "{1B14D370-9916-41BF-A378-7D8274ACF0CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{426F64A9-BF97-4CCD-9973-2728906D8DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{426F64A9-BF97-4CCD-9973-2728906D8DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{426F64A9-BF97-4CCD-9973-2728906D8DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{426F64A9-BF97-4CCD-9973-2728906D8DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B14D370-9916-41BF-A378-7D8274ACF0CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B14D370-9916-41BF-A378-7D8274ACF0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B14D370-9916-41BF-A378-7D8274ACF0CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B14D370-9916-41BF-A378-7D8274ACF0CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1B14D370-9916-41BF-A378-7D8274ACF0CA} = {93EC05DC-F20B-4873-8938-63D3B316F27D}
+	EndGlobalSection
+EndGlobal
