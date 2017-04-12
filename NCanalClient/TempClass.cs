@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * 订阅及消费canal服务端消息实例,注意仅仅是一个示例.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,13 +23,13 @@ namespace NCanalClient
         {
             var batchSize = 5 * 1024;
             var msg = connector.GetWithoutAck(batchSize);
-
+            var batchId = msg?.Id ?? 0;
             if (msg.Entries != null && msg.Entries.Count > 0)
             {
                 foreach (var item in msg.Entries)
                 {
                     var exeTime = item.Header.ExecuteTime;
-                    var delayTime = GetTimeStamp() - exeTime;
+                    var delayTime = GetTimeStamp(DateTime.Now,13) - exeTime;
                     var log = $"日志名:{item.Header.LogfileName};日志位置：{item.Header.LogfileOffset};执行时间：{exeTime},延迟时间:{delayTime};Schema名称:{item.Header.SchemaName};表名:{item.Header.TableName}";
                     if (item.EntryType == com.alibaba.otter.canal.protocol.EntryType.TRANSACTIONBEGIN || item.EntryType == com.alibaba.otter.canal.protocol.EntryType.TRANSACTIONEND)
                     {
@@ -76,6 +80,16 @@ namespace NCanalClient
                         }
                     }
                 }
+                /*
+                 * 注意:
+                 * 经生测试,获取到的消息需要确认消费掉,如果不确认,服务端会将该消息存在内存中,数据量多了后
+                 * 会产生Canal主进程运行,但是对应的实例却死掉.造成无法长期进行服务,所以一定要注意*确认消息消费*
+                 */
+                if (batchId > 0)
+                {
+                    connector.Ack(batchId);
+                    Logger.Trace($"调用connector.Ack({batchId})");
+                }
             }
 
         }
@@ -99,6 +113,46 @@ namespace NCanalClient
         {
             TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds);
+        }
+        public static long GetTimeStamp(DateTime time, int len = 10)
+        {
+            if (len > 18 || len <= 0)
+            {
+                throw new ArgumentOutOfRangeException("len", "长度不能大于18,或小于等于0");
+            }
+            System.DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1, 0, 0, 0, 0));
+            long t = (time.Ticks - startTime.Ticks);// / 10000;   //除10000调整为13位   
+            string tStr = t.ToString();
+            var tLen = tStr.Length;
+            var less = tLen - len;
+            if (less == 0)
+            {
+                return t;
+            }
+            else if (less > 0)
+            {
+                return long.Parse(tStr.Substring(0, len));
+            }
+            else
+            {
+                return long.Parse(tStr + FixedZeroStr(0 - less));
+            }
+            //  return t;
+        }
+
+        private static string FixedZeroStr(int len)
+        {
+            if (len <= 0)
+            {
+                return "";
+            }
+            char[] res = new char[len];
+            while (len-- > 0)
+            {
+                res[len] = '0';
+            }
+
+            return new string(res);
         }
     }
 }
